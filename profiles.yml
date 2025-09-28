@@ -1,0 +1,10 @@
+default:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account-json
+      project: stock-data-portfolio
+      dataset: us_stock
+      threads: 4
+      keyfile: key.json
