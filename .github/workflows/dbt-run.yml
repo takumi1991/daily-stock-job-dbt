@@ -1,0 +1,31 @@
+name: dbt run
+
+on:
+  workflow_dispatch:  # 手動実行
+  schedule:
+    - cron: "0 9 * * *"  # 毎朝9時に実行（日本時間に合わせるなら調整要）
+
+jobs:
+  dbt:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dbt-bigquery
+        run: pip install dbt-bigquery
+
+      - name: Run dbt models
+        env:
+          DBT_BIGQUERY_KEYFILE: ${{ secrets.GCP_SA_KEY_JSON }}
+          DBT_BIGQUERY_PROJECT: stock-data-portfolio
+          DBT_BIGQUERY_DATASET: us_stock
+        run: |
+          echo "${DBT_BIGQUERY_KEYFILE}" > key.json
+          dbt run --profiles-dir .
