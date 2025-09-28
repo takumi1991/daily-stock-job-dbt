@@ -24,7 +24,9 @@ jobs:
 
       - name: Run dbt models
         env:
-          DBT_BIGQUERY_KEYFILE: ${{ secrets.GCP_SA_KEY_JSON }}
+          GCP_SA_KEY_JSON: ${{ secrets.GCP_SA_KEY_JSON }}
         run: |
-          echo "${DBT_BIGQUERY_KEYFILE}" > key.json
+          echo "$GCP_SA_KEY_JSON" > key.json
+          cat key.json | jq . > key-fixed.json
+          export GOOGLE_APPLICATION_CREDENTIALS=$PWD/key-fixed.json
           dbt run --profiles-dir .
