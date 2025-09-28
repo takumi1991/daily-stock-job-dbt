@@ -1,11 +1,24 @@
-name: "my_dbt_project"
-version: "1.0.0"
+name: stock_data_portfolio
+version: 1.0.0
 config-version: 2
 
-profile: "default"
+profile: default   # profiles.yml の "default" を参照
 
-model-paths: ["models"]
+model-paths: ["models"]    # SQLモデルを置く場所
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
 
 models:
-  my_dbt_project:
-    +materialized: view
+  stock_data_portfolio:
+    +materialized: table   # モデルをテーブルとして作成
+    staging:
+      +schema: staging     # ステージング用スキーマ
+      +materialized: view
+    marts:
+      +schema: marts       # マート用スキーマ
+      +materialized: table
