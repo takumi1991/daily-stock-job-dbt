@@ -3,8 +3,10 @@ default:
   outputs:
     dev:
       type: bigquery
-      method: service-account-json
-      project: stock-data-portfolio
-      dataset: us_stock
+      method: service-account
+      project: stock-data-portfolio   # ご主人様のGCPプロジェクトID
+      dataset: us_stock               # dbtで使うデータセット
+      keyfile: key.json               # Actions内で作られる一時ファイル
       threads: 4
-      keyfile: key.json
+      timeout_seconds: 300
+      priority: interactive
